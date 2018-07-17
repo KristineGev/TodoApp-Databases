@@ -32,6 +32,12 @@ public class MainActivity extends AppCompatActivity {
                 public void onEditItem(TodoItem todoItem) {
                     openEditTodoItem(todoItem);
                 }
+
+                @Override
+                public void onRemoveItem(int position) {
+                    delegateItemRemoveToFRagment(position);
+
+                }
             };
 
     private TodoItemFragment.OnFragmentInteractionListener mOnTodoItemInteractionListener =
@@ -76,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         TodoItemFragment todoItemFragment = TodoItemFragment.newInstance(todoItem);
         todoItemFragment.setOnInteractionListener(mOnTodoItemInteractionListener);
         openFragmentInContainer(todoItemFragment, true);
+
     }
 
     private void delegateItemCreationToFragment(TodoItem todoItem) {
@@ -87,6 +94,12 @@ public class MainActivity extends AppCompatActivity {
         mTodoItemsListFragment.editTodoItem(todoItem);
         getFragmentManager().popBackStack();
     }
+
+    private void delegateItemRemoveToFRagment(int position) {
+        mTodoItemsListFragment.removeTodoItem(position);
+        getFragmentManager().popBackStack();
+    }
+
 
     private void openFragmentInContainer(Fragment fragment, boolean addToBackStack) {
         FragmentManager fragmentManager = getFragmentManager();

@@ -4,10 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import static com.akhandanyan.todoapp.db.TodoItemContract.*;
 import static com.akhandanyan.todoapp.db.TodoItemContract.TodoEntry.*;
 
 public class DBHelper extends SQLiteOpenHelper {
-    private static final String DB_NAME = "todo.db";
+    private static final String DB_NAME = "todo";
     private static final int DB_VERSION = 1;
 
 
@@ -27,17 +28,17 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    private final static String SQL_CREATE_TODO_ITEMS = "CREATE TABLE " +
-            TABLE_NAME + "(" +
-            _ID + "INTEGER PRIMARY KEY, " +
-            TITLE + "TEXT NOT NULL, " +
-            DESCRIPTION + "TEXT NOT NULL, " +
-            DATE + "DATE, " +
-            ISREMIND + "BOOLEAN " +
-            REPEAT_TYPE + "TEXT, " +
-            PRIORITY + "INTEGER )";
+    private static final String SQL_CREATE_TODO_ITEMS =
+            "CREATE TABLE IF NOT EXISTS " + TodoEntry.TABLE_NAME + "( " +
+                    TodoEntry._ID + " INTEGER PRIMARY KEY, " +
+                    TodoEntry.TITLE + "TEXT NOT NULL, " +
+                    TodoEntry.DESCRIPTION + "TEXT NOT NULL, " +
+                    TodoEntry.DATE + "DATE, " +
+                    TodoEntry.ISREMIND + "BOOLEAN, " +
+                    TodoEntry.REPEAT_TYPE + "TEXT, " +
+                    TodoEntry.PRIORITY + "INTEGER )";
 
 
     private final static String SQL_DELETE_TODO_ITEMS =
-            "DROP TABLE IF EXISTS " + TodoItemContract.TodoEntry.TABLE_NAME;
+            "DROP TABLE IF EXISTS " + TodoEntry.TABLE_NAME;
 }

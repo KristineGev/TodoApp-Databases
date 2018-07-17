@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.akhandanyan.todoapp.model.TodoItem;
 
@@ -22,15 +23,15 @@ public class DBManager {
         mDBHelper = new DBHelper(context);
     }
 
-    public DBManager() {
 
-    }
 
     public void insertTodoItem(TodoItem todoItem) {
         ContentValues contentValues = getContentValues(todoItem);
-        mDBHelper.getWritableDatabase().insert(TodoEntry.TABLE_NAME,
+     mDBHelper.getWritableDatabase().insert(TodoEntry.TABLE_NAME,
                 null, contentValues);
-    }
+
+            }
+
 
     public void updateTodoItem(TodoItem todoItem) {
         String selected = TodoEntry._ID + "=?";
@@ -38,6 +39,7 @@ public class DBManager {
         ContentValues values = getContentValues(todoItem);
         mDBHelper.getWritableDatabase().update(TodoEntry.TABLE_NAME,
                 values, selected, selectionArgs);
+
     }
 
 
@@ -72,12 +74,25 @@ public class DBManager {
         return todoItems;
     }
 
+    public TodoItem getItem(String id) {
+        try (TodoCursorWrapper cursor = query(
+                TodoEntry._ID + " = ?",
+                new String[]{id.toString()})) {
+            if (cursor.getCount() == 0)
+                return null;
+            cursor.moveToFirst();
+            return cursor.getTodoItem();
+        }
+    }
+
+
     private static ContentValues getContentValues(TodoItem todoItem) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(TodoItemContract.TodoEntry.TITLE, "First todo item");
+        contentValues.put(TodoEntry.TITLE, todoItem.getTitle());
+        contentValues.put(TodoEntry.DESCRIPTION, todoItem.getDescription());
         contentValues.put(TodoEntry.DATE, todoItem.getDate().getTime());
         contentValues.put(TodoEntry.ISREMIND, todoItem.isShouldRemind());
-        contentValues.put(TodoEntry.REPEAT_TYPE, String.valueOf(todoItem.getRepeatType()));
+        contentValues.put(TodoEntry.REPEAT_TYPE, todoItem.getRepeatType());
         contentValues.put(TodoEntry.PRIORITY, todoItem.getPriority());
         return contentValues;
     }

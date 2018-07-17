@@ -71,8 +71,7 @@ public class TodoItemAdapter extends RecyclerView.Adapter<TodoItemViewHolder> {
     public void addItem(TodoItem item) {
         mData.add(item);
         notifyItemInserted(mData.size() - 1);
-        DBManager dbManager=new DBManager();
-        dbManager.insertTodoItem(item);
+
     }
 
     public void updateItem(TodoItem item) {
@@ -88,16 +87,14 @@ public class TodoItemAdapter extends RecyclerView.Adapter<TodoItemViewHolder> {
             }
 
         }
-        DBManager dbManager=new DBManager();
-        dbManager.updateTodoItem(item);
+
     }
 
-    private void removeItem(int position) {
+    public void removeItem(int position) {
 
         mData.remove(position);
         notifyItemRemoved(position);
-        DBManager dbManager=new DBManager();
-        dbManager.removeTodoItem(String.valueOf(position));
+
 
 
     }
@@ -108,5 +105,6 @@ public class TodoItemAdapter extends RecyclerView.Adapter<TodoItemViewHolder> {
 
     public interface OnItemSelectedListener {
         void onItemSelected(TodoItem todoItem);
+        void onItemRemoved(int position);
     }
 }

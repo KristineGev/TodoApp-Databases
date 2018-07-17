@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.akhandanyan.todoapp.R;
 import com.akhandanyan.todoapp.adapter.TodoItemAdapter;
+import com.akhandanyan.todoapp.db.DBManager;
 import com.akhandanyan.todoapp.model.TodoItem;
 
 public class TodoItemsListFragment extends Fragment {
@@ -35,11 +36,19 @@ public class TodoItemsListFragment extends Fragment {
         return fragment;
     }
 
-    private TodoItemAdapter.OnItemSelectedListener mOnItemSelectedListener = new TodoItemAdapter.OnItemSelectedListener() {
+    private TodoItemAdapter.OnItemSelectedListener mOnItemSelectedListener=new TodoItemAdapter.OnItemSelectedListener() {
+
         @Override
         public void onItemSelected(TodoItem todoItem) {
             if (mListener != null) {
                 mListener.onEditItem(todoItem);
+            }
+        }
+
+        @Override
+        public void onItemRemoved(int position) {
+            if (mListener != null) {
+                mListener.onRemoveItem(position);
             }
         }
     };
@@ -69,11 +78,22 @@ public class TodoItemsListFragment extends Fragment {
 
     public void addTodoItem(TodoItem todoItem) {
         mTodoItemAdapter.addItem(todoItem);
+        DBManager dbManager=new DBManager(getActivity());
+        dbManager.insertTodoItem(todoItem);
     }
 
     public void editTodoItem(TodoItem todoItem) {
         mTodoItemAdapter.updateItem(todoItem);
+        DBManager dbManager=new DBManager(getActivity());
+        dbManager.updateTodoItem(todoItem);
+        dbManager.getItem(todoItem.getId());
     }
+
+    public void removeTodoItem(int position){
+        mTodoItemAdapter.removeItem(position);
+        DBManager dbManager=new DBManager(getActivity());
+        dbManager.removeTodoItem(String.valueOf(position));
+        }
 
     public void setOnInteractionListener(OnFragmentInteractionListener onInteractionListener) {
         mListener = onInteractionListener;
@@ -91,5 +111,6 @@ public class TodoItemsListFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         void onEditItem(TodoItem todoItem);
+        void onRemoveItem(int position);
     }
 }

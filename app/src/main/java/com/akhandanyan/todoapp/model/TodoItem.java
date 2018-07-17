@@ -8,6 +8,11 @@ import java.util.Date;
 public class TodoItem implements Parcelable {
     public static final int PRIORITY_MAX = 5;
     public static final int PRIORITY_MIN = 0;
+    public static final String REPEAT_NONE="NONE";
+    public static final String REPEAT_DAILY="DAILY";
+    public static final String REPEAT_WEEKLY="WEEKLY";
+    public static final String REPEAT_MONTHLY="MONTHLY";
+
 
     private String mId;
     private String mTitle;
@@ -15,10 +20,13 @@ public class TodoItem implements Parcelable {
     private Date mDate;
     private boolean mShouldRemind;
     private int mPriority;
-    private Repeat mRepeatType;
+    private String  mRepeatType;
 
     public TodoItem() {
 
+    }
+    public TodoItem(String id){
+        mId=id;
     }
 
     public String getId() {
@@ -73,11 +81,12 @@ public class TodoItem implements Parcelable {
         mPriority = priority;
     }
 
-    public Repeat getRepeatType() {
+    public String getRepeatType() {
+
         return mRepeatType;
     }
 
-    public void setRepeatType(Repeat repeatType) {
+    public void setRepeatType(String repeatType) {
         mRepeatType = repeatType;
     }
 
@@ -111,13 +120,12 @@ public class TodoItem implements Parcelable {
 
     @Override
     public String toString() {
-        return  "[" + mId + "]:"
+        return "[" + mId + "]:"
                 + mTitle + "|"
                 + mDescription + "|"
                 + mDate + "|"
                 + mShouldRemind + "|"
-                + mPriority + "|"
-                + mRepeatType;
+                + mPriority ;
     }
 
     @Override
@@ -133,11 +141,9 @@ public class TodoItem implements Parcelable {
         dest.writeLong(mDate.getTime());
         dest.writeInt(mShouldRemind ? 1 : 0);
         dest.writeInt(mPriority);
-        if (mRepeatType != null) {
-            dest.writeInt(mRepeatType.ordinal());
-        } else {
-            dest.writeInt(-1);
-        }
+        dest.writeString(mRepeatType);
+
+
     }
 
     public static final Parcelable.Creator<TodoItem> CREATOR
@@ -158,13 +164,9 @@ public class TodoItem implements Parcelable {
         mDate = new Date(in.readLong());
         mShouldRemind = in.readInt() == 1;
         mPriority = in.readInt();
-        int repeatTypeOrdinal = in.readInt();
-        if (repeatTypeOrdinal > 0) {
-            mRepeatType = Repeat.values()[repeatTypeOrdinal];
+        mRepeatType=in.readString();
+
         }
     }
 
-    public enum Repeat {
-        NONE, DAILY, WEEKLY, MONTHLY
-    }
-}
+//

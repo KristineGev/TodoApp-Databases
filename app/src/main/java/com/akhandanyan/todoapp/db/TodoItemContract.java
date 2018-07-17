@@ -13,7 +13,6 @@ public class TodoItemContract implements BaseColumns {
         public static final String DESCRIPTION = "description";
         public static final String DATE = "date";
         public static final String ISREMIND = "isRemind";
-        public static final String ISREPEAT = "isRepeat";
         public static final String REPEAT_TYPE = "repeat_type";
         public static final String PRIORITY = "priority";
     }

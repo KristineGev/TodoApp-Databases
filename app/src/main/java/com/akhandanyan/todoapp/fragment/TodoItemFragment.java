@@ -31,11 +31,11 @@ public class TodoItemFragment extends Fragment {
 
     public static final int MODE_CREATION = 0;
     public static final int MODE_CHANGE = 1;
-    DBManager mDBManager = new DBManager(getActivity());
     private OnFragmentInteractionListener mListener;
 
     public TodoItemFragment() {
         // Required empty public constructor
+
     }
 
     /**
@@ -174,18 +174,18 @@ public class TodoItemFragment extends Fragment {
         mReminderCheckBox.setChecked(todoItem.isShouldRemind());
         if (todoItem.getRepeatType() != null) {
             switch (todoItem.getRepeatType()) {
-                case NONE:
+                case "NONE":
                     mRepeatCheckBox.setChecked(false);
                     break;
-                case DAILY:
+                case "DAILY":
                     mRepeatRadioGroup.check(R.id.radio_fragment_todo_item_daily);
                     mRepeatCheckBox.setChecked(true);
                     break;
-                case WEEKLY:
+                case "WEEKLY":
                     mRepeatRadioGroup.check(R.id.radio_fragment_todo_item_weekly);
                     mRepeatCheckBox.setChecked(true);
                     break;
-                case MONTHLY:
+                case"MONTHLY":
                     mRepeatCheckBox.setChecked(true);
                     mRepeatRadioGroup.check(R.id.radio_fragment_todo_item_monthly);
                     break;
@@ -201,12 +201,10 @@ public class TodoItemFragment extends Fragment {
                 switch (mMode) {
                     case MODE_CREATION:
                         mListener.onItemCreated(createTodoItemFromInput());
-                        mDBManager.insertTodoItem(mTodoItem);
 
                         break;
                     case MODE_CHANGE:
                         mListener.onItemChanged(createTodoItemFromInput());
-                        mDBManager.updateTodoItem(mTodoItem);
                         break;
                 }
             }
@@ -228,16 +226,16 @@ public class TodoItemFragment extends Fragment {
         if (mRepeatCheckBox.isChecked()) {
             switch (mRepeatRadioGroup.getCheckedRadioButtonId()) {
                 case R.id.radio_fragment_todo_item_daily:
-                    mTodoItem.setRepeatType(TodoItem.Repeat.DAILY);
+                    mTodoItem.setRepeatType(TodoItem.REPEAT_DAILY);
                     break;
                 case R.id.radio_fragment_todo_item_weekly:
-                    mTodoItem.setRepeatType(TodoItem.Repeat.WEEKLY);
+                    mTodoItem.setRepeatType(TodoItem.REPEAT_WEEKLY);
                     break;
                 case R.id.radio_fragment_todo_item_monthly:
-                    mTodoItem.setRepeatType(TodoItem.Repeat.MONTHLY);
+                    mTodoItem.setRepeatType(TodoItem.REPEAT_MONTHLY);
                     break;
                 default:
-                    mTodoItem.setRepeatType(TodoItem.Repeat.NONE);
+                    mTodoItem.setRepeatType(TodoItem.REPEAT_NONE);
             }
         }
         return mTodoItem;
