@@ -81,7 +81,9 @@ public class DBManager {
             if (cursor.getCount() == 0)
                 return null;
             cursor.moveToFirst();
+
             return cursor.getTodoItem();
+
         }
     }
 
